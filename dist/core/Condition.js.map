@@ -1,0 +1,1 @@
+{"version":3,"file":"Condition.js","sourceRoot":"","sources":["../../src/core/Condition.ts"],"names":[],"mappings":";;AAAA,yCAAmD;AACnD,4CAAyC;AAEzC;;;;;;IAMI;AAEJ,MAAqB,SAAU,SAAQ,kBAAQ;IAE3C;;;;;;;OAOG;IACH,YAAY,IAAI,GAAG,WAAW,EAAE,KAAK,GAAG,IAAI,EAAE,aAA0B,EAAE;QACtE,KAAK,CACD,qBAAS,EACT,IAAI,EACJ,KAAK,EACL,EAAE,EACF,UAAU,CACb,CAAC;IACN,CAAC;CAEJ;AApBD,4BAoBC"}

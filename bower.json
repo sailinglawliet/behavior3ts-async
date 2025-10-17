@@ -1,0 +1,36 @@
+{
+  "name"     : "behavior3js",
+  "version"  : "0.2.3",
+  "homepage" : "https://github.com/renatopp/behavior3js",
+  "authors": [
+    {
+      "name"     : "Renato Pereira",
+      "email"    : "renato.ppontes@gmail.com",
+      "homepage" : "http://guineashots.com"
+    },
+    {
+      "name"     : "Daniele Polencic",
+      "email"    : "daniele.polencic@gmail.com",
+      "homepage" : "https://uasabi.com"
+    }
+  ],
+  "description" : "Behavior3 client library for Javascript (Behavior Trees for Javascript)",
+  "license"     : "MIT",
+  "keywords": [
+    "behavior", "tree", "behavior tree", "ai", "artificial intelligence",
+    "behavior3", "b3", "game dev", "gameai"
+  ],
+  "main": [
+    "libs/behavior3.js"
+  ],
+  "ignore"      : [
+    "node_modules",
+    "bower_components",
+    "build",
+    "docs",
+    "src",
+    "tests",
+    "tools",
+    "examples"
+  ]
+}
