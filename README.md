@@ -1,3 +1,16 @@
+behavior3ts-async fork from behavior3ts, but support asyn/await natrually.
+
+u can just do like:
+
+var tree = new BehaviorTree();
+tree.load(JSON.parse(json), extMap);
+
+and then just
+
+const status = await tree.tick() 
+
+it will automatically resolve all promise, also u can implent your own action class which has async tick() method.
+
 # BEHAVIOR3JS
 
 [![Build Status](https://travis-ci.org/behavior3/behavior3js.svg?branch=master)](https://travis-ci.org/behavior3/behavior3js)
