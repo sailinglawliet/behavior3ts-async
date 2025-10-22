@@ -1,8 +1,8 @@
 import Composite from '../core/Composite';
-import { SUCCESS } from '../constants';
+import { SUCCESS, STATE } from '../constants';
 import Tick from '../core/Tick';
 import BaseNode from '../core/BaseNode';
-import { STATE } from '../constants';
+import type { IProperties } from '../core/BaseNode';
 // import { Logger } from '@byted-service/logger';
 
 // const logger = new Logger();
@@ -13,7 +13,7 @@ import { STATE } from '../constants';
  */
 export default class Sequence extends Composite {
   constructor(children: BaseNode[] = []) {
-    super(children, 'Sequence');
+    super(children, 'Sequence', 'Sequence', {} as IProperties);
   }
 
   /**

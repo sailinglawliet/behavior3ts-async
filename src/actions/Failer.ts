@@ -1,5 +1,5 @@
 import Action from '../core/Action';
-import { FAILURE } from '../constants';
+import { FAILURE, STATE } from '../constants';
 import Tick from '../core/Tick';
 
 /**
@@ -25,7 +25,7 @@ export default class Failer extends Action {
      * @param {b3.Tick} tick A tick instance.
      * @return {Constant} Always return `FAILURE`.
      **/
-    tick(tick: Tick) {
+    tick(_tick: Tick): STATE {
         return FAILURE;
     }
 }

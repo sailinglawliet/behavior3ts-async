@@ -1,6 +1,7 @@
 import Composite from '../core/Composite';
-import { SUCCESS, RUNNING, STATE } from '../constants';
+import { SUCCESS, RUNNING, STATE, ERROR } from '../constants';
 import BaseNode from '../core/BaseNode';
+import type { IProperties } from '../core/BaseNode';
 import Tick from '../core/Tick';
 
 /**
@@ -18,23 +19,30 @@ export default class MemSequence extends Composite {
 
     /**
      * Creates an instance of MemSequence.
-     * @param {Object} params
-     * @param {Array} params.children
+     * @param {Array<BaseNode>} children
      * @memberof MemSequence
      */
-    constructor(children = new Array<BaseNode>()) {
+    constructor(children: BaseNode[] = []) {
+        const properties: IProperties = {};
         super(
             children,
-            'MemSequence'
+            'MemSequence',
+            '',
+            properties
         );
     }
 
     /**
      * Open method.
      * @method open
-     * @param {b3.Tick} tick A tick instance.
+     * @param {Tick} tick A tick instance.
+     * @return {void}
      **/
-    open(tick: Tick) {
+    open(tick: Tick): void {
+        if (!tick.blackboard || !tick.tree) {
+            throw new Error('MemSequence: tick.blackboard or tick.tree is null');
+        }
+
         tick.blackboard.set('runningChild', 0, tick.tree.id, this.id);
     }
 
@@ -45,6 +53,10 @@ export default class MemSequence extends Composite {
      * @return {Constant} A state constant.
      **/
     async tick(tick: Tick): Promise<STATE> {
+        if (!tick.blackboard || !tick.tree) {
+            return ERROR;
+        }
+
         let child = tick.blackboard.get('runningChild', tick.tree.id, this.id);
         for (let i = child; i < this.children.length; i++) {
             const status = await this.children[i]._execute(tick);

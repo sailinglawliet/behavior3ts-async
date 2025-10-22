@@ -1,5 +1,5 @@
 import BaseNode, { IProperties } from './BaseNode';
-import { DECORATOR, SUCCESS } from '../constants';
+import { DECORATOR, SUCCESS, STATE } from '../constants';
 import Tick from './Tick';
 
 /**
@@ -12,7 +12,7 @@ import Tick from './Tick';
 export default class Decorator extends BaseNode {
   declare child: BaseNode | null;
 
-  constructor(child: BaseNode = null, name = 'Decorator', title = name, properties: IProperties = {}) {
+  constructor(child: BaseNode | null = null, name: string = 'Decorator', title: string = name, properties: IProperties = {}) {
     super(DECORATOR, name, title, '', properties);
     this.child = child;
   }
@@ -22,7 +22,7 @@ export default class Decorator extends BaseNode {
    * 默认实现仅简单执行 child。
    * 子类可重写该逻辑（如 Inverter, Limiter, Repeater 等）。
    */
-  async tick(tick: Tick) {
+  async tick(tick: Tick): Promise<STATE> {
     if (!this.child) {
       // 没有 child 的装饰器一般直接返回 SUCCESS 或 FAILURE
       return SUCCESS;

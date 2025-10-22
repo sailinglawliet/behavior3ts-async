@@ -1,6 +1,7 @@
 import Action from '../core/Action';
-import { SUCCESS, RUNNING } from '../constants';
+import { SUCCESS, RUNNING, STATE, ERROR } from '../constants';
 import Tick from '../core/Tick';
+import type { IProperties } from '../core/BaseNode';
 
 /**
  * Wait a few seconds.
@@ -19,11 +20,12 @@ export default class Wait extends Action {
      * @param {Number} settings.milliseconds Maximum time, in milliseconds, a child can execute.
      * @memberof Wait
      */
-    constructor(milliseconds = 0) {
+    constructor(milliseconds: number = 0) {
+        const properties: IProperties = { milliseconds: 0 };
         super(
             'Wait',
             'Wait <milliseconds>ms',
-            { milliseconds: 0 },
+            properties
         );
 
         this.endTime = milliseconds;
@@ -33,9 +35,13 @@ export default class Wait extends Action {
      * Open method.
      * @method open
      * @param {Tick} tick A tick instance.
+     * @return {void}
      **/
-    open(tick: Tick) {
-        let startTime = (new Date()).getTime();
+    open(tick: Tick): void {
+        if (!tick.blackboard || !tick.tree) {
+            throw new Error('Wait: tick.blackboard or tick.tree is null');
+        }
+        const startTime: number = (new Date()).getTime();
         tick.blackboard.set('startTime', startTime, tick.tree.id, this.id);
     }
 
@@ -43,11 +49,14 @@ export default class Wait extends Action {
      * Tick method.
      * @method tick
      * @param {Tick} tick A tick instance.
-     * @return {Constant} A state constant.
+     * @return {STATE} A state constant.
      **/
-    tick(tick: Tick) {
-        let currTime = (new Date()).getTime();
-        let startTime = tick.blackboard.get('startTime', tick.tree.id, this.id);
+    tick(tick: Tick): STATE {
+        if (!tick.blackboard || !tick.tree) {
+            return ERROR;
+        }
+        const currTime: number = (new Date()).getTime();
+        const startTime: number = tick.blackboard.get('startTime', tick.tree.id, this.id) as number;
 
         if (currTime - startTime > this.endTime) {
             return SUCCESS;

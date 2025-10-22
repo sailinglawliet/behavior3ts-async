@@ -1,7 +1,7 @@
 import { VERSION, SUCCESS, FAILURE, RUNNING, ERROR, COMPOSITE, DECORATOR, ACTION, CONDITION } from './constants';
 import { createUUID } from './b3.functions';
 
-import Error from './actions/Error';
+import ErrorAction from './actions/Error';
 import Failer from './actions/Failer';
 import Runner from './actions/Runner';
 import Succeeder from './actions/Succeeder';
@@ -40,7 +40,7 @@ export
     ACTION,
     CONDITION,
     createUUID,
-    Error,
+    ErrorAction,
     Failer,
     Runner,
     Succeeder,

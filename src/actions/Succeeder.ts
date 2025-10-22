@@ -1,5 +1,5 @@
 import Action from '../core/Action';
-import { SUCCESS } from '../constants';
+import { SUCCESS, STATE } from '../constants';
 import Tick from '../core/Tick';
 
 /**
@@ -23,10 +23,10 @@ export default class Succeeder extends Action {
     /**
      * Tick method.
      * @method tick
-     * @param {b3.Tick} tick A tick instance.
-     * @return {Constant} Always return `SUCCESS`.
+     * @param {Tick} tick A tick instance.
+     * @return {STATE} Always return `SUCCESS`.
      **/
-    tick(tick: Tick) {
+    tick(_tick: Tick): STATE {
         return SUCCESS;
     }
 }

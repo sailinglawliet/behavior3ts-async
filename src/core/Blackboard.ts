@@ -43,10 +43,10 @@ export type Memory = { [key: string]: any };
 
 
 export interface TreeMemory {
-    nodeMemory?: Memory;
-    openNodes?: BaseNode[];
-    traversalDepth?: number;
-    traversalCycle?: number;
+    nodeMemory: Memory;
+    openNodes: BaseNode[];
+    traversalDepth: number;
+    traversalCycle: number;
 }
 
 export default class Blackboard {
@@ -70,7 +70,7 @@ export default class Blackboard {
      * @return {Object} The tree memory.
      * @protected
      **/
-    _getTreeMemory(treeScope: string) {
+    _getTreeMemory(treeScope: string): TreeMemory {
         if (!this._treeMemory[treeScope]) {
             this._treeMemory[treeScope] = {
                 'nodeMemory': {},
@@ -92,8 +92,8 @@ export default class Blackboard {
      * @return {Object} The node memory.
      * @protected
      **/
-    _getNodeMemory(treeMemory: TreeMemory, nodeScope: string) {
-        let memory = treeMemory.nodeMemory;
+    _getNodeMemory(treeMemory: TreeMemory, nodeScope: string): Memory {
+        const memory = treeMemory.nodeMemory;
         if (!memory[nodeScope]) {
             memory[nodeScope] = {};
         }
@@ -115,14 +115,17 @@ export default class Blackboard {
      * @return {Object} A memory object.
      * @protected
      **/
-    _getMemory(treeScope?: string, nodeScope?: string) {
+    _getMemory(treeScope?: string, nodeScope?: string): Memory {
         let memory = this._baseMemory;
 
         if (treeScope) {
-            memory = this._getTreeMemory(treeScope);
-
             if (nodeScope) {
-                memory = this._getNodeMemory(memory, nodeScope);
+                const treeMemory = this._getTreeMemory(treeScope);
+                memory = this._getNodeMemory(treeMemory, nodeScope);
+            } else {
+                // 当只有treeScope时，返回nodeMemory而不是整个TreeMemory
+                const treeMemory = this._getTreeMemory(treeScope);
+                memory = treeMemory.nodeMemory;
             }
         }
 
@@ -145,8 +148,8 @@ export default class Blackboard {
      *                           memory.
      * @param {String} nodeScope The node id if accessing the node memory.
      **/
-    set(key: string, value: any, treeScope?: string, nodeScope?: string) {
-        let memory = this._getMemory(treeScope, nodeScope);
+    set(key: string, value: any, treeScope?: string, nodeScope?: string): void {
+        const memory = this._getMemory(treeScope, nodeScope);
         memory[key] = value;
     }
 
@@ -166,8 +169,8 @@ export default class Blackboard {
      * @param {String} nodeScope The node id if accessing the node memory.
      * @return {Object} The value stored or undefined.
      **/
-    get(key: string, treeScope?: string, nodeScope?: string) {
-        let memory = this._getMemory(treeScope, nodeScope);
+    get(key: string, treeScope?: string, nodeScope?: string): any {
+        const memory = this._getMemory(treeScope, nodeScope);
         return memory[key];
     }
 }

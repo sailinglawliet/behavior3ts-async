@@ -2,6 +2,7 @@ import Decorator from '../core/Decorator';
 import { FAILURE, SUCCESS, ERROR, STATE } from '../constants';
 import Tick from '../core/Tick';
 import BaseNode from '../core/BaseNode';
+import type { IProperties } from '../core/BaseNode';
 
 /**
  * The Inverter decorator inverts the result of the child, returning `SUCCESS`
@@ -16,14 +17,16 @@ export default class Inverter extends Decorator {
 
     /**
      * Creates an instance of Inverter.
-     * @param {Object} params
-     * @param {BaseNode} params.child The child node.
+     * @param {BaseNode | null} child The child node.
      * @memberof Inverter
      */
-    constructor(child: BaseNode = null) {
+    constructor(child: BaseNode | null = null) {
+        const properties: IProperties = {};
         super(
-            child,
-            'Inverter'
+            child || undefined,
+            'Inverter',
+            '',
+            properties
         );
     }
 
@@ -40,9 +43,9 @@ export default class Inverter extends Decorator {
 
         let status = await this.child._execute(tick);
 
-        if (status == SUCCESS) {
+        if (status === SUCCESS) {
             status = FAILURE;
-        } else if (status == FAILURE) {
+        } else if (status === FAILURE) {
             status = SUCCESS;
         }
 

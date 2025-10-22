@@ -1,4 +1,4 @@
-import BaseNode, { IProperties } from '../core/BaseNode';
+import BaseNode, { IProperties } from './BaseNode';
 import { ACTION } from '../constants';
 
 /**
@@ -24,13 +24,12 @@ export default class Action extends BaseNode {
 
     /**
      * Creates an instance of Action.
-     * @param {Object} options
-     * @param {String} options.name Node name. Default to `Action`.
-     * @param {String} options.title
-     * @param {Object} options.properties
+     * @param {string} name Node name. Default to `Action`.
+     * @param {string} title
+     * @param {IProperties} properties
      * @memberof Action
      */
-    constructor(name = 'Action', title = name, properties: IProperties = {}) {
+    constructor(name: string = 'Action', title: string = name, properties: IProperties = {}) {
         super(
             ACTION,
             name,

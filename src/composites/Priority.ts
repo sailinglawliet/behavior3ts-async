@@ -1,8 +1,8 @@
 import Composite from '../core/Composite';
-import { FAILURE } from '../constants';
+import { FAILURE, STATE } from '../constants';
 import Tick from '../core/Tick';
 import BaseNode from '../core/BaseNode';
-import { STATE } from '../constants';
+import type { IProperties } from '../core/BaseNode';
 
 /**
  * Priority ticks its children sequentially until one of them returns
@@ -22,11 +22,8 @@ export default class Priority extends Composite {
      * @param {Array} params.children
      * @memberof Priority
      */
-    constructor(children = new Array<BaseNode>()) {
-        super(
-            children,
-            'Priority'
-        );
+    constructor(children: BaseNode[] = []) {
+        super(children, 'Priority', 'Priority', {} as IProperties);
     }
 
     /**

@@ -1,5 +1,5 @@
 import Action from '../core/Action';
-import { RUNNING } from '../constants';
+import { RUNNING, STATE } from '../constants';
 import Tick from '../core/Tick';
 
 /**
@@ -25,7 +25,7 @@ export default class Runner extends Action {
      * @param {b3.Tick} tick A tick instance.
      * @return {Constant} Always return `RUNNING`.
      **/
-    tick(tick: Tick) {
+    tick(_tick: Tick): STATE {
         return RUNNING;
     }
 }

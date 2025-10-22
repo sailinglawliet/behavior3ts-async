@@ -1,7 +1,6 @@
-import BaseNode from '../core/BaseNode';
-import { COMPOSITE } from '../constants';
+import BaseNode, { IProperties } from '../core/BaseNode';
+import { COMPOSITE, STATE, SUCCESS } from '../constants';
 import Tick from '../core/Tick';
-import { STATE, SUCCESS, FAILURE, RUNNING } from '../constants';
 
 /**
  * 异步兼容 Composite 基类
@@ -13,7 +12,7 @@ import { STATE, SUCCESS, FAILURE, RUNNING } from '../constants';
 export default class Composite extends BaseNode {
   declare children: BaseNode[];
 
-  constructor(children: BaseNode[] = [], name = 'Composite', title = name, properties = {}) {
+  constructor(children: BaseNode[] = [], name: string = 'Composite', title: string = name, properties: IProperties = {}) {
     super(COMPOSITE, name, title, '', properties);
     this.children = (children).slice(0);
   }

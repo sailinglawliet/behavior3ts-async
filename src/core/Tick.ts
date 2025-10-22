@@ -28,28 +28,28 @@ export default class Tick {
      * @property {b3.BehaviorTree} tree
      * @readOnly
      **/
-    tree: BehaviorTree = null;
+    tree: BehaviorTree | null = null;
 
     /**
      * The debug reference.
      * @property {Object} debug
      * @readOnly
      */
-    debug: Object = null;
+    debug: Record<string, any> | null = null;
 
     /**
      * The target object reference.
      * @property {Object} target
      * @readOnly
      **/
-    target: Object = null;
+    target: Record<string, any> | null = null;
 
     /**
      * The blackboard reference.
      * @property {b3.Blackboard} blackboard
      * @readOnly
      **/
-    blackboard: Blackboard = null;
+    blackboard: Blackboard | null = null;
 
     // updated during the tick signal
 
@@ -65,28 +65,27 @@ export default class Tick {
      * The number of nodes entered during the tick. Update during the tree
      * traversal.
      *
-     * @property {Integer} _nodeCount
+     * @property {number} _nodeCount
      * @protected
      * @readOnly
      **/
-    _nodeCount = 0;
+    _nodeCount: number = 0;
     /**
      * Initialization method.
-     * @method initialize
      * @constructor
      **/
     constructor() {
-        // set by BehaviorTree
-
+        // These properties will be set by BehaviorTree before use
     }
 
     /**
      * Called when entering a node (called by BaseNode).
      * @method _enterNode
-     * @param {Object} node The node that called this method.
+     * @param {BaseNode} node The node that called this method.
      * @protected
+     * @return {void}
      **/
-    _enterNode(node: BaseNode) {
+    _enterNode(node: BaseNode): void {
         this._nodeCount++;
         this._openNodes.push(node);
 
@@ -96,30 +95,33 @@ export default class Tick {
     /**
      * Callback when opening a node (called by BaseNode).
      * @method _openNode
-     * @param {Object} node The node that called this method.
+     * @param {BaseNode} node The node that called this method.
      * @protected
+     * @return {void}
      **/
-    _openNode(node: BaseNode) {
+    _openNode(_node: BaseNode): void {
         // TODO: call debug here
     }
 
     /**
      * Callback when ticking a node (called by BaseNode).
      * @method _tickNode
-     * @param {Object} node The node that called this method.
+     * @param {BaseNode} node The node that called this method.
      * @protected
+     * @return {void}
      **/
-    _tickNode(node: BaseNode) {
+    _tickNode(_node: BaseNode): void {
         // TODO: call debug here
     }
 
     /**
      * Callback when closing a node (called by BaseNode).
      * @method _closeNode
-     * @param {Object} node The node that called this method.
+     * @param {BaseNode} node The node that called this method.
      * @protected
+     * @return {void}
      **/
-    _closeNode(node: BaseNode) {
+    _closeNode(_node: BaseNode): void {
         // TODO: call debug here
         this._openNodes.pop();
     }
@@ -127,10 +129,11 @@ export default class Tick {
     /**
      * Callback when exiting a node (called by BaseNode).
      * @method _exitNode
-     * @param {Object} node The node that called this method.
+     * @param {BaseNode} node The node that called this method.
      * @protected
+     * @return {void}
      **/
-    _exitNode(node: BaseNode) {
+    _exitNode(_node: BaseNode): void {
         // TODO: call debug here
     }
 }

@@ -1,28 +1,28 @@
 import { createUUID } from '../b3.functions';
-import { COMPOSITE, DECORATOR, RUNNING, STATE } from '../constants';
+import { COMPOSITE, DECORATOR, STATE } from '../constants';
 import * as Decorators from '../decorators/index';
 import * as Composites from '../composites/index';
 import * as Actions from '../actions/index';
 import Tick from './Tick';
-import BaseNode from './BaseNode';
+import BaseNode, { IProperties } from './BaseNode';
 import Blackboard from './Blackboard';
 
 export default class BehaviorTree {
   id = createUUID();
   title = 'The behavior tree';
   description = 'Default description';
-  properties = {};
-  root: BaseNode = null;
-  debug: any = null;
+  properties: IProperties = {};
+  root: BaseNode | null = null;
+  debug: Record<string, any> | null = null;
 
   constructor() { }
 
-  load(data: any, names: any = {}) {
+  load(data: { [key: string]: any }, names: { [key: string]: any } = {}): void {
     this.title = data.title || this.title;
     this.description = data.description || this.description;
     this.properties = data.properties || this.properties;
 
-    let nodes: any = {};
+    let nodes: Record<string, BaseNode> = {};
     let id, spec, node;
 
     for (id in data.nodes) {
@@ -54,7 +54,7 @@ export default class BehaviorTree {
       spec = data.nodes[id];
       node = nodes[id];
 
-      if (node.category === COMPOSITE && spec.children) {
+      if (node.category === COMPOSITE && spec.children && 'children' in node) {
         for (let i = 0; i < spec.children.length; i++) {
           let cid = spec.children[i];
           node.children.push(nodes[cid]);
@@ -67,7 +67,7 @@ export default class BehaviorTree {
     this.root = nodes[data.root];
   }
 
-  dump() {
+  dump(): { [key: string]: any } {
     let data: { [key: string]: any } = {};
     let customNames = [];
 
@@ -85,6 +85,7 @@ export default class BehaviorTree {
       let node = stack.pop();
 
       let spec: { [key: string]: any } = {};
+      if (!node) continue;
       spec.id = node.id;
       spec.name = node.name;
       spec.title = node.title;
@@ -131,7 +132,7 @@ export default class BehaviorTree {
    * 异步增强版 tick()
    * 支持 async/await 节点
    */
-  async tick(target: Object, blackboard: Blackboard): Promise<STATE> {
+  async tick(target: Record<string, any>, blackboard: Blackboard): Promise<STATE> {
     if (!blackboard) {
       throw new Error(
         'The blackboard parameter is obligatory and must be an instance of b3.Blackboard'
@@ -148,6 +149,10 @@ export default class BehaviorTree {
     /* EXECUTE ROOT NODE */
     let state: STATE;
     try {
+      if (!this.root) {
+        state = STATE.ERROR;
+        return state;
+      }
       const result = this.root._execute(tick);
       state = result instanceof Promise ? await result : result;
     } catch (e) {

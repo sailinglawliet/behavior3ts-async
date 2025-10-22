@@ -10,9 +10,10 @@ export type IProperties = { [key: string]: any };
  */
 export default class BaseNode {
   id = createUUID();
-  parameters = {};
-  child: BaseNode;
-  children: BaseNode[];
+  parameters: { [key: string]: any } = {};
+  child: BaseNode | null = null;
+  children: BaseNode[] = [];
+  
 
   constructor(
     public category = Category.NONE,
@@ -30,8 +31,10 @@ export default class BaseNode {
     this._enter(tick);
 
     // OPEN
-    if (!tick.blackboard.get('isOpen', tick.tree.id, this.id)) {
-      this._open(tick);
+    if (tick.blackboard && tick.tree) {
+      if (!tick.blackboard.get('isOpen', tick.tree.id, this.id)) {
+        this._open(tick);
+      }
     }
 
     let status: STATE;
@@ -61,7 +64,9 @@ export default class BaseNode {
 
   _open(tick: Tick) {
     tick._openNode(this);
-    tick.blackboard.set('isOpen', true, tick.tree.id, this.id);
+    if (tick.blackboard && tick.tree){
+      tick.blackboard.set('isOpen', true, tick.tree.id, this.id);
+    }
     this.open(tick);
   }
 
@@ -72,7 +77,9 @@ export default class BaseNode {
 
   _close(tick: Tick) {
     tick._closeNode(this);
-    tick.blackboard.set('isOpen', false, tick.tree.id, this.id);
+    if (tick.blackboard && tick.tree) {
+      tick.blackboard.set('isOpen', false, tick.tree.id, this.id);
+    }
     this.close(tick);
   }
 
@@ -81,11 +88,11 @@ export default class BaseNode {
     this.exit(tick);
   }
 
-  enter(tick: Tick) { }
-  open(tick: Tick) { }
-  tick(tick: Tick): STATE | Promise<STATE> {
+  enter(_tick: Tick) { }
+  open(_tick: Tick) { }
+  tick(_tick: Tick): STATE | Promise<STATE> {
     return STATE.NONE;
   }
-  close(tick: Tick) { }
-  exit(tick: Tick) { }
+  close(_tick: Tick) { }
+  exit(_tick: Tick) { }
 }

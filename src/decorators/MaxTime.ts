@@ -1,6 +1,7 @@
 import Decorator from '../core/Decorator';
 import { FAILURE, ERROR, STATE } from '../constants';
 import BaseNode from '../core/BaseNode';
+import type { IProperties } from '../core/BaseNode';
 import Tick from '../core/Tick';
 
 /**
@@ -23,17 +24,17 @@ export default class MaxTime extends Decorator {
      * - **maxTime** (*Integer*) Maximum time a child can execute.
      * - **child** (*BaseNode*) The child node.
 
-     * @param {Object} params Object with parameters.
-     * @param {Number} params.maxTime Maximum time a child can execute.
-     * @param {BaseNode} params.child The child node.
+     * @param {number} maxTime Maximum time a child can execute.
+     * @param {BaseNode | null} child The child node.
      * @memberof MaxTime
      */
-    constructor(maxTime = 1, child: BaseNode = null) {
+    constructor(maxTime: number = 1, child: BaseNode | null = null) {
+        const properties: IProperties = { maxTime: maxTime };
         super(
-            child,
+            child || undefined,
             'MaxTime',
             'Max <maxTime>ms',
-            { maxTime: maxTime },
+            properties
         );
 
         if (!maxTime) {
@@ -47,9 +48,13 @@ export default class MaxTime extends Decorator {
      * Open method.
      * @method open
      * @param {Tick} tick A tick instance.
+     * @return {void}
      **/
-    open(tick: Tick) {
-        let startTime = (new Date()).getTime();
+    open(tick: Tick): void {
+        if (!tick.blackboard || !tick.tree) {
+            throw new Error('MaxTime: tick.blackboard or tick.tree is null');
+        }
+        const startTime: number = (new Date()).getTime();
         tick.blackboard.set('startTime', startTime, tick.tree.id, this.id);
     }
 
@@ -60,12 +65,16 @@ export default class MaxTime extends Decorator {
      * @return {Constant} A state constant.
      **/
     async tick(tick: Tick): Promise<STATE> {
+        if (!tick.blackboard || !tick.tree) {
+            return ERROR;
+        }
+
         if (!this.child) {
             return ERROR;
         }
 
-        let currTime = (new Date()).getTime();
-        let startTime = tick.blackboard.get('startTime', tick.tree.id, this.id);
+        const currTime: number = (new Date()).getTime();
+        const startTime: number = tick.blackboard.get('startTime', tick.tree.id, this.id) as number;
 
         let status = await this.child._execute(tick);
         if (currTime - startTime > this.maxTime) {

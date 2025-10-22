@@ -1,4 +1,4 @@
-import { ERROR } from '../constants';
+import { ERROR, STATE } from '../constants';
 import Action from '../core/Action';
 import Tick from '../core/Tick';
 
@@ -6,14 +6,14 @@ import Tick from '../core/Tick';
  * This action node returns `ERROR` always.
  *
  * @module b3
- * @class Error
+ * @class ErrorAction
  * @extends Action
  **/
-export default class Error extends Action {
+export default class ErrorAction extends Action {
 
     /**
-     * Creates an instance of Error.
-     * @memberof Error
+     * Creates an instance of ErrorAction.
+     * @memberof ErrorAction
      */
     constructor() {
         super('Error');
@@ -23,9 +23,9 @@ export default class Error extends Action {
      * Tick method.
      * @method tick
      * @param {b3.Tick} tick A tick instance.
-     * @return {Constant} Always return `ERROR`.
+     * @return {STATE} Always return `ERROR`.
      **/
-    tick(tick: Tick) {
+    tick(_tick: Tick): STATE {
         return ERROR;
     }
 }
