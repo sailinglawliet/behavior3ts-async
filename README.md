@@ -1,3 +1,8 @@
+fork from behavior3, support async/await actions natrually.
+u can 
+- const tree = loadBehaviorTree(xxxx)
+- const status = await tree.tick(agent, blackboard)
+
 # BEHAVIOR3JS
 
 [![Build Status](https://travis-ci.org/behavior3/behavior3js.svg?branch=master)](https://travis-ci.org/behavior3/behavior3js)
@@ -108,3 +113,4 @@ Through the development, you can use
     gulp dev
 
 in order to watch the source files and run jshint automatically.
+
